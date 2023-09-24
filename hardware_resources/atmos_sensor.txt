@@ -1,3 +1,0 @@
-https://github.com/CoreElectronics/CE-PiicoDev-BME280-MicroPython-Module
-
-https://github.com/CoreElectronics/CE-PiicoDev-Atmospheric-Sensor-BME280
