@@ -24,7 +24,7 @@ BlynkTimer timer;
 #define LOW_MOIST 20
 
 // Hardware Pins
-// #define soil 13
+#define soilPin A0
 // #define waterPump 12
 
 // Virtual Pins
@@ -68,7 +68,8 @@ BLYNK_WRITE(VPIN_AUTO)
 
 void readMoisture()
 {
-  moistPercentage=random(1,100);
+  int moistVal = analogRead(soilPin);
+  moistPercentage= map(moistVal ,4095, 0, 0, 100);
   Serial.println((String)"Soil moisture: " + moistPercentage);
   Blynk.virtualWrite(V0, moistPercentage);
   delay(1000);
