@@ -1,0 +1,70 @@
+// Libraries for BME280 and SparkFun VEML6030 Ambient Light Sensor
+#include <Wire.h>
+#include <BME280I2C.h>
+#include "SparkFun_VEML6030_Ambient_Light_Sensor.h"
+
+// Setup for BME280
+BME280I2C::Settings settings(
+  BME280::OSR_X1,
+  BME280::OSR_X1,
+  BME280::OSR_X1,
+  BME280::Mode_Forced,
+  BME280::StandbyTime_1000ms,
+  BME280::Filter_Off,
+  BME280::SpiEnable_False,
+  BME280I2C::I2CAddr_0x77 // I2C address for BME280. Adjust if needed.
+);
+
+BME280I2C bme(settings);
+
+// Setup for SparkFun VEML6030 Ambient Light Sensor
+#define AL_ADDR 0x10
+SparkFun_Ambient_Light light(AL_ADDR);
+float gain = .125;
+int time = 100;
+long luxVal = 0;
+
+void setup() {
+  Wire.begin(); // Initialize I2C
+  Serial.begin(115200);
+
+  // Initialize BME280
+  while (!bme.begin()) {
+    Serial.println("Could not find BME280 sensor!");
+    delay(1000);
+  }
+
+  // Initialize SparkFun VEML6030 Ambient Light Sensor
+  if (light.begin()) {
+    Serial.println("Ready to sense some light!");
+  } else {
+    Serial.println("Could not communicate with the light sensor!");
+  }
+
+  light.setGain(gain);
+  light.setIntegTime(time);
+}
+
+void loop() {
+  // Reading data from BME280
+  float temp(NAN), hum(NAN), pres(NAN);
+  BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
+  BME280::PresUnit presUnit(BME280::PresUnit_Pa);
+  bme.read(pres, temp, hum, tempUnit, presUnit);
+
+  Serial.print("Temp: ");
+  Serial.print(temp);
+  Serial.print("°C\tHumidity: ");
+  Serial.print(hum);
+  Serial.print("%\tPressure: ");
+  Serial.print(pres);
+  Serial.println(" Pa");
+
+  // Reading data from SparkFun VEML6030 Ambient Light Sensor
+  luxVal = light.readLight();
+  Serial.print("Ambient Light Reading: ");
+  Serial.print(luxVal);
+  Serial.println(" Lux");
+  
+  delay(1000);
+}
