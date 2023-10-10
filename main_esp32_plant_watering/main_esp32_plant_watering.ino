@@ -81,8 +81,9 @@ void pumpOn()
   // 10 secs ?
   Blynk.virtualWrite(VPIN_PUMP, 1);
   Serial.println("Pump On");
-  digitalWrite(waterPump, )
+  digitalWrite(waterPump, HIGH);
   delay(5000);
+  digitalWrite(waterPump, LOW);
   Blynk.virtualWrite(VPIN_PUMP, 0);
   Serial.println("Pump Off");
 }
@@ -99,8 +100,8 @@ void controlPump()
 void setup()
 {
   Serial.begin(115200);
-  // pinMode(waterPump, OUTPUT);
-  // digitalWrite(waterPump, LOW);
+  pinMode(waterPump, OUTPUT);
+  digitalWrite(waterPump, LOW);
   delay(100);
 
   Blynk.begin(auth, ssid, pass);
