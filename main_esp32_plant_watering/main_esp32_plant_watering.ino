@@ -25,7 +25,7 @@ BlynkTimer timer;
 
 // Hardware Pins
 #define soilPin A0
-// #define waterPump 12
+#define waterPump 2
 
 // Virtual Pins
 #define VPIN_MOIST  V0
@@ -81,6 +81,7 @@ void pumpOn()
   // 10 secs ?
   Blynk.virtualWrite(VPIN_PUMP, 1);
   Serial.println("Pump On");
+  digitalWrite(waterPump, )
   delay(5000);
   Blynk.virtualWrite(VPIN_PUMP, 0);
   Serial.println("Pump Off");
