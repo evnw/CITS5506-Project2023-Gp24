@@ -29,7 +29,7 @@ BlynkTimer timer;
 
 // Hardware Pins
 #define soilPin A0
-#define waterPump 2
+#define waterPump 12
 
 // Virtual Pins
 #define VPIN_MOIST  V0
@@ -55,14 +55,13 @@ BME280I2C::Settings settings(
   BME280::SpiEnable_False,
   BME280I2C::I2CAddr_0x77 // I2C address for BME280. Adjust if needed.
 );
-
 BME280I2C bme(settings);
 
 // Setup for SparkFun VEML6030 Ambient Light Sensor
 #define AL_ADDR 0x10
 SparkFun_Ambient_Light light(AL_ADDR);
 float gain = .125;
-int time = 100;
+int integrationTime = 100;
 long luxVal = 0;
 
 BLYNK_CONNECTED()
@@ -140,7 +139,7 @@ void setup()
   }
 
   light.setGain(gain);
-  light.setIntegTime(time);
+  light.setIntegTime(integrationTime);
 
   pinMode(waterPump, OUTPUT);
   digitalWrite(waterPump, LOW);
