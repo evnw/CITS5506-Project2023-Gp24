@@ -95,8 +95,32 @@ void readMoisture()
   int moistVal = analogRead(soilPin);
   moistPercentage= map(moistVal ,4095, 0, 0, 100);
   Serial.println((String)"Soil moisture: " + moistPercentage);
-  Blynk.virtualWrite(V0, moistPercentage);
+  Blynk.virtualWrite(VPIN_MOIST, moistPercentage);
   delay(1000);
+}
+
+void readAtmos() {
+  float temp(NAN), hum(NAN), pres(NAN);
+  BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
+  BME280::PresUnit presUnit(BME280::PresUnit_Pa);
+  bme.read(pres, temp, hum, tempUnit, presUnit);
+  
+  Serial.print("Temp: ");
+  Serial.print(temp);
+  Serial.print("°C\tHumidity: ");
+  Serial.print(hum);
+  Serial.print("%\tPressure: ");
+  Serial.print(pres);
+  Serial.println(" Pa");
+  // Reading data from SparkFun VEML6030 Ambient Light Sensor
+  luxVal = light.readLight();
+  Serial.print("Ambient Light Reading: ");
+  Serial.print(luxVal);
+  Serial.println(" Lux");
+
+  Blynk.virtualWrite(VPIN_TEMP, temp);
+  Blynk.virtualWrite(VPIN_HUMID, hum);
+  Blynk.virtualWrite(VPIN_LIGHT, luxVal);
 }
 
 void pumpOn()
@@ -148,6 +172,7 @@ void setup()
   Blynk.begin(auth, ssid, pass);
   delay(1000);
   timer.setInterval(5000L, readMoisture);
+  timer.setInterval(5000L, readAtmos);
   delay(5000);
 }
 
@@ -156,24 +181,7 @@ void loop() {
   timer.run();
   controlPump();
 
-  float temp(NAN), hum(NAN), pres(NAN);
-  BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
-  BME280::PresUnit presUnit(BME280::PresUnit_Pa);
-  bme.read(pres, temp, hum, tempUnit, presUnit);
-  
-  Serial.print("Temp: ");
-  Serial.print(temp);
-  Serial.print("°C\tHumidity: ");
-  Serial.print(hum);
-  Serial.print("%\tPressure: ");
-  Serial.print(pres);
-  Serial.println(" Pa");
-
-  // Reading data from SparkFun VEML6030 Ambient Light Sensor
-  luxVal = light.readLight();
-  Serial.print("Ambient Light Reading: ");
-  Serial.print(luxVal);
-  Serial.println(" Lux");
+ 
   
   delay(1000);
 }
