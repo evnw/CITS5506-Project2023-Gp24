@@ -25,7 +25,7 @@ char pass[] = "123456789";
 BlynkTimer timer;
 
 // min moisture
-#define LOW_MOIST 20
+int LOW_MOIST = 20;
 
 // Hardware Pins
 #define soilPin A0
@@ -38,6 +38,7 @@ BlynkTimer timer;
 #define VPIN_HUMID  V3
 #define VPIN_LIGHT  V4
 #define VPIN_AUTO   V5
+#define VPIN_DRY    V6
 
 int moistPercentage;
 long temperature;
@@ -81,6 +82,12 @@ BLYNK_WRITE(VPIN_PUMP)
     Serial.println("Manual pump on");
     pumpOn();
   }
+}
+
+BLYNK_WRITE(VPIN_DRY)
+{
+  LOW_MOIST = param.asInt()
+  Serial.println((String)"Low moisture changed to: " + LOW_MOIST);
 }
 
 // if auto mode changed
