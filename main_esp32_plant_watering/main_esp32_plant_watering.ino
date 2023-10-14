@@ -86,7 +86,7 @@ BLYNK_WRITE(VPIN_PUMP)
 
 BLYNK_WRITE(VPIN_DRY)
 {
-  LOW_MOIST = param.asInt()
+  LOW_MOIST = param.asInt();
   Serial.println((String)"Low moisture changed to: " + LOW_MOIST);
 }
 
